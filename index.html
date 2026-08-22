@@ -174,10 +174,25 @@ function copyText(text, done) {
   }
 }
 
-// 点击账号/密码复制并弹提示
+// 轻量 toast 提示
+function showToast(msg) {
+  var t = document.getElementById('toast-tip');
+  if (!t) {
+    t = document.createElement('div');
+    t.id = 'toast-tip';
+    t.style.cssText = 'position:fixed;left:50%;bottom:120px;transform:translateX(-50%);background:rgba(0,0,0,0.8);color:#fff;padding:10px 18px;border-radius:20px;font-size:14px;z-index:9999;opacity:0;transition:opacity .25s;pointer-events:none;max-width:80%;text-align:center;word-break:break-all';
+    document.body.appendChild(t);
+  }
+  t.textContent = msg;
+  t.style.opacity = '1';
+  clearTimeout(t._timer);
+  t._timer = setTimeout(function () { t.style.opacity = '0'; }, 1800);
+}
+
+// 点击账号/密码复制并 toast 提示
 function copyWithTip(text, label) {
   copyText(text, function () {
-    alert(label + ' 已复制：' + text);
+    showToast(label + ' 已复制：' + text);
   });
 }
 
