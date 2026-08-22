@@ -160,20 +160,12 @@ const NAGOYA_ACCOUNTS = [
     "time": "16:00"
   },
   {
-    "email": "OhmieMarbury599@outlook.com",
-    "time": "16:00"
-  },
-  {
     "email": "SilasWatersjpsdg@hotmail.com",
     "time": "16:00"
   },
   {
-    "email": "MallochDarren516@outlook.com",
-    "time": "18:30"
-  },
-  {
-    "email": "PulseMontrose36@outlook.com",
-    "time": "18:30"
+    "email": "OhmieMarbury599@outlook.com",
+    "time": "16:00"
   },
   {
     "email": "BriceAndersonkkis@hotmail.com",
@@ -225,26 +217,6 @@ const NAGOYA_ACCOUNTS = [
   },
   {
     "email": "EldaEmmerichvh@hotmail.com",
-    "time": "18:30"
-  },
-  {
-    "email": "RenfredMichonski22@outlook.com",
-    "time": "18:30"
-  },
-  {
-    "email": "GlyndaHurrle64@outlook.com",
-    "time": "18:30"
-  },
-  {
-    "email": "JaynaGracy9185@outlook.com",
-    "time": "18:30"
-  },
-  {
-    "email": "SojoKleiboeker2297@outlook.com",
-    "time": "18:30"
-  },
-  {
-    "email": "CarmelaPredovicrzh@hotmail.com",
     "time": "18:30"
   }
 ];
