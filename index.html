@@ -69,17 +69,37 @@
   </div>
 </div>
 
+<!-- 8/23 埼玉越谷店 -->
+<div class="store-block">
+  <h3>🔑 8/23 埼玉越谷店账号（87）</h3>
+  <div id="acc-locked-koshigaya" class="locked-box">
+    <div style="font-weight:600;margin-bottom:8px">🔒 此区域已锁定，请输入访问口令</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <input type="password" id="acc-key-koshigaya" placeholder="输入口令" style="flex:1;min-width:140px;padding:8px;border:1px solid #ccc;border-radius:6px;font-size:14px;box-sizing:border-box">
+      <button onclick="unlockStore('koshigaya')" style="flex:0 0 auto;padding:8px 16px;border:none;border-radius:6px;background:#0a66c2;color:#fff;font-size:14px">解锁</button>
+    </div>
+    <div id="acc-msg-koshigaya" style="color:#b00020;font-size:12px;margin-top:6px"></div>
+  </div>
+  <div id="acc-area-koshigaya" style="display:none">
+    <button class="btn-copy-all" onclick="copyAll('koshigaya')">📋 复制全部邮箱</button>
+    <div class="acc-list" id="acc-list-koshigaya"></div>
+  </div>
+</div>
+
 <script src="shibuya-accounts.js"></script>
 <script src="nagoya-accounts.js"></script>
+<script src="koshigaya-accounts.js"></script>
 <script>
 var PASSCODE = {
   shibuya: "8899",
-  nagoya: "1358"
+  nagoya: "1358",
+  koshigaya: "888888"
 };
 
 var STORES = {
   shibuya: { key: "acc-key-shibuya", msg: "acc-msg-shibuya", locked: "acc-locked-shibuya", area: "acc-area-shibuya", list: "acc-list-shibuya", data: SHIBUYA_ACCOUNTS },
-  nagoya: { key: "acc-key-nagoya", msg: "acc-msg-nagoya", locked: "acc-locked-nagoya", area: "acc-area-nagoya", list: "acc-list-nagoya", data: NAGOYA_ACCOUNTS }
+  nagoya: { key: "acc-key-nagoya", msg: "acc-msg-nagoya", locked: "acc-locked-nagoya", area: "acc-area-nagoya", list: "acc-list-nagoya", data: NAGOYA_ACCOUNTS },
+  koshigaya: { key: "acc-key-koshigaya", msg: "acc-msg-koshigaya", locked: "acc-locked-koshigaya", area: "acc-area-koshigaya", list: "acc-list-koshigaya", data: KOSHIGAYA_ACCOUNTS }
 };
 
 function legacyCopy(text, done) {
