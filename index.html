@@ -11,8 +11,10 @@
   .acc-list .acc-item:last-child { border-bottom: none; }
   .acc-list input { flex: 1; min-width: 0; padding: 8px; border: 1px solid #ccc; border-radius: 6px; font-size: 13px; box-sizing: border-box; }
   .acc-list button { flex: 0 0 auto; padding: 8px 12px; border: none; border-radius: 6px; background: #0a66c2; color: #fff; font-size: 13px; }
+  .acc-list .time-tag { flex: 0 0 auto; font-size: 12px; color: #8a5a00; background: #fdf0d8; border-radius: 10px; padding: 4px 8px; }
   .btn-copy-all { padding: 10px 18px; border: none; border-radius: 8px; background: #0a66c2; color: #fff; font-size: 15px; margin-bottom: 8px; }
   .locked-box { padding: 14px; border: 1px solid #e0c9a6; border-radius: 10px; background: #fdf6ec; margin-bottom: 8px; }
+  .store-block { margin-bottom: 24px; }
 </style>
 </head>
 <body>
@@ -25,27 +27,54 @@
 <hr>
 <h3>🔗 目标网站</h3>
 <p style="font-size:18px;line-height:1.8">
-  <a href="https://parks2.bandainamco-am.co.jp/" style="color:#0a66c2;word-break:break-all">https://parks2.bandainamco-am.co.jp/</a>
+  <a href="https://parks2.bandainamco-am.co.jp/" target="_blank" rel="noopener" style="color:#0a66c2;word-break:break-all">https://parks2.bandainamco-am.co.jp/</a>
 </p>
-<p style="color:#888">👆 直接点击可打开网站；长按链接可弹出菜单「拷贝」，复制网址。</p>
+<p style="color:#888">👆 点击在新页签打开网站；长按链接可弹出菜单「拷贝」，复制网址。</p>
 <hr>
-<h3>🔑 切换账号（邮箱列表）</h3>
-<div id="acc-locked" class="locked-box">
-  <div style="font-weight:600;margin-bottom:8px">🔒 此区域已锁定，请输入访问口令</div>
-  <div style="display:flex;gap:8px;flex-wrap:wrap">
-    <input type="password" id="acc-key" placeholder="输入口令" style="flex:1;min-width:140px;padding:8px;border:1px solid #ccc;border-radius:6px;font-size:14px;box-sizing:border-box">
-    <button onclick="unlockAccounts()" style="flex:0 0 auto;padding:8px 16px;border:none;border-radius:6px;background:#0a66c2;color:#fff;font-size:14px">解锁</button>
+
+<!-- 8/23 東京渋谷店 -->
+<div class="store-block">
+  <h3>🔑 8/23 東京渋谷店账号</h3>
+  <div id="acc-locked-shibuya" class="locked-box">
+    <div style="font-weight:600;margin-bottom:8px">🔒 此区域已锁定，请输入访问口令</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <input type="password" id="acc-key-shibuya" placeholder="输入口令" style="flex:1;min-width:140px;padding:8px;border:1px solid #ccc;border-radius:6px;font-size:14px;box-sizing:border-box">
+      <button onclick="unlockStore('shibuya')" style="flex:0 0 auto;padding:8px 16px;border:none;border-radius:6px;background:#0a66c2;color:#fff;font-size:14px">解锁</button>
+    </div>
+    <div id="acc-msg-shibuya" style="color:#b00020;font-size:12px;margin-top:6px"></div>
   </div>
-  <div id="acc-msg" style="color:#b00020;font-size:12px;margin-top:6px"></div>
-</div>
-<div id="acc-area" style="display:none">
-  <button class="btn-copy-all" onclick="copyAll()">📋 复制全部邮箱</button>
-  <div class="acc-list" id="acc-list"></div>
+  <div id="acc-area-shibuya" style="display:none">
+    <button class="btn-copy-all" onclick="copyAll('shibuya')">📋 复制全部邮箱</button>
+    <div class="acc-list" id="acc-list-shibuya"></div>
+  </div>
 </div>
 
-<script src="accounts.js"></script>
+<!-- 8/23 愛知名古屋店 -->
+<div class="store-block">
+  <h3>🔑 8/23 愛知名古屋店账号</h3>
+  <div id="acc-locked-nagoya" class="locked-box">
+    <div style="font-weight:600;margin-bottom:8px">🔒 此区域已锁定，请输入访问口令</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <input type="password" id="acc-key-nagoya" placeholder="输入口令" style="flex:1;min-width:140px;padding:8px;border:1px solid #ccc;border-radius:6px;font-size:14px;box-sizing:border-box">
+      <button onclick="unlockStore('nagoya')" style="flex:0 0 auto;padding:8px 16px;border:none;border-radius:6px;background:#0a66c2;color:#fff;font-size:14px">解锁</button>
+    </div>
+    <div id="acc-msg-nagoya" style="color:#b00020;font-size:12px;margin-top:6px"></div>
+  </div>
+  <div id="acc-area-nagoya" style="display:none">
+    <button class="btn-copy-all" onclick="copyAll('nagoya')">📋 复制全部邮箱</button>
+    <div class="acc-list" id="acc-list-nagoya"></div>
+  </div>
+</div>
+
+<script src="shibuya-accounts.js"></script>
+<script src="nagoya-accounts.js"></script>
 <script>
 var PASSCODE = "8899";
+
+var STORES = {
+  shibuya: { key: "acc-key-shibuya", msg: "acc-msg-shibuya", locked: "acc-locked-shibuya", area: "acc-area-shibuya", list: "acc-list-shibuya", data: SHIBUYA_ACCOUNTS },
+  nagoya: { key: "acc-key-nagoya", msg: "acc-msg-nagoya", locked: "acc-locked-nagoya", area: "acc-area-nagoya", list: "acc-list-nagoya", data: NAGOYA_ACCOUNTS }
+};
 
 function legacyCopy(text, done) {
   var ta = document.createElement('textarea');
@@ -74,32 +103,35 @@ function copyText(text, btn) {
   }
 }
 
-function unlockAccounts() {
-  var key = document.getElementById('acc-key').value.trim();
-  var msg = document.getElementById('acc-msg');
+function unlockStore(storeName) {
+  var cfg = STORES[storeName];
+  var key = document.getElementById(cfg.key).value.trim();
+  var msg = document.getElementById(cfg.msg);
   if (key !== PASSCODE) {
     msg.textContent = '❌ 口令错误';
     return;
   }
   msg.textContent = '';
-  document.getElementById('acc-locked').style.display = 'none';
-  var area = document.getElementById('acc-area');
+  document.getElementById(cfg.locked).style.display = 'none';
+  var area = document.getElementById(cfg.area);
   area.style.display = '';
-  var list = document.getElementById('acc-list');
+  var list = document.getElementById(cfg.list);
   list.innerHTML = '';
-  ACCOUNT_EMAILS.forEach(function (email, i) {
+  cfg.data.forEach(function (item, i) {
     var row = document.createElement('div');
     row.className = 'acc-item';
     row.innerHTML =
-      '<input type="text" readonly value="' + email.replace(/"/g, '&quot;') + '" id="acc-mail-' + i + '">' +
-      '<button onclick="copyText(document.getElementById(\'acc-mail-' + i + '\').value, this)">复制</button>';
+      '<input type="text" readonly value="' + String(item.email || "").replace(/"/g, '&quot;') + '" id="acc-mail-' + storeName + '-' + i + '">' +
+      (item.time ? '<span class="time-tag">' + item.time + '</span>' : '') +
+      '<button onclick="copyText(document.getElementById(\'acc-mail-' + storeName + '-' + i + '\').value, this)">复制</button>';
     list.appendChild(row);
   });
 }
 
-function copyAll() {
-  var text = ACCOUNT_EMAILS.join('\n');
-  var btn = document.querySelector('.btn-copy-all');
+function copyAll(storeName) {
+  var cfg = STORES[storeName];
+  var text = cfg.data.map(function (item) { return item.email + (item.time ? "  " + item.time : ""); }).join('\n');
+  var btn = document.querySelector('.store-block #acc-area-' + storeName + ' .btn-copy-all');
   copyText(text, btn);
 }
 </script>
