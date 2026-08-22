@@ -7,10 +7,13 @@
 <style>
   body { font-family: -apple-system, sans-serif; padding: 20px; max-width: 640px; margin: 0 auto; }
   .acc-list { max-height: 60vh; overflow-y: auto; border: 1px solid #e0c9a6; border-radius: 10px; background: #fdf6ec; padding: 10px; }
-  .acc-list .acc-item { display: flex; align-items: center; gap: 8px; padding: 8px 6px; border-bottom: 1px solid #f0e2cc; }
+  .acc-list .acc-item { display: flex; align-items: center; gap: 6px; padding: 8px 6px; border-bottom: 1px solid #f0e2cc; flex-wrap: wrap; }
   .acc-list .acc-item:last-child { border-bottom: none; }
   .acc-list input { flex: 1; min-width: 0; padding: 8px; border: 1px solid #ccc; border-radius: 6px; font-size: 13px; box-sizing: border-box; }
-  .acc-list button { flex: 0 0 auto; padding: 8px 12px; border: none; border-radius: 6px; background: #0a66c2; color: #fff; font-size: 13px; }
+  .acc-list input.acc-pass { flex: 0 0 120px; }
+  .acc-list .btn-acc { flex: 0 0 auto; padding: 8px 10px; border: none; border-radius: 6px; font-size: 12px; cursor: pointer; }
+  .btn-copy-user { background: #0a66c2; color: #fff; }
+  .btn-copy-pass { background: #8a5a00; color: #fff; }
   .acc-list .time-tag { flex: 0 0 auto; font-size: 12px; color: #8a5a00; background: #fdf0d8; border-radius: 10px; padding: 4px 8px; }
   .btn-copy-all { padding: 10px 18px; border: none; border-radius: 8px; background: #0a66c2; color: #fff; font-size: 15px; margin-bottom: 8px; }
   .locked-box { padding: 14px; border: 1px solid #e0c9a6; border-radius: 10px; background: #fdf6ec; margin-bottom: 8px; }
@@ -125,8 +128,10 @@ function unlockStore(storeName) {
     row.className = 'acc-item';
     row.innerHTML =
       '<input type="text" readonly value="' + String(item.email || "").replace(/"/g, '&quot;') + '" id="acc-mail-' + storeName + '-' + i + '">' +
+      '<input type="text" readonly class="acc-pass" value="' + String(item.pass || "").replace(/"/g, '&quot;') + '" id="acc-pass-' + storeName + '-' + i + '">' +
       (item.time ? '<span class="time-tag">' + item.time + '</span>' : '') +
-      '<button onclick="copyText(document.getElementById(\'acc-mail-' + storeName + '-' + i + '\').value, this)">复制</button>';
+      '<button class="btn-acc btn-copy-user" onclick="copyText(document.getElementById(\'acc-mail-' + storeName + '-' + i + '\').value, this)">账号</button>' +
+      '<button class="btn-acc btn-copy-pass" onclick="copyText(document.getElementById(\'acc-pass-' + storeName + '-' + i + '\').value, this)">密码</button>';
     list.appendChild(row);
   });
 }
