@@ -18,13 +18,23 @@
   .btn-copy-all { padding: 10px 18px; border: none; border-radius: 8px; background: #0a66c2; color: #fff; font-size: 15px; margin-bottom: 8px; }
   .locked-box { padding: 14px; border: 1px solid #e0c9a6; border-radius: 10px; background: #fdf6ec; margin-bottom: 8px; }
   .store-block { margin-bottom: 24px; }
+
+  /* 小屏（iPhone SE 等窄屏）：账号/密码上下排列 */
+  @media (max-width: 380px) {
+    .acc-list .acc-item { flex-direction: column; align-items: stretch; gap: 6px; }
+    .acc-list input { width: 100%; }
+    .acc-list input.acc-pass { flex: 1 1 auto; width: 100%; }
+    .acc-list .btn-acc { flex: 1 1 45%; padding: 10px 10px; font-size: 14px; }
+    .acc-list .time-tag { align-self: flex-start; }
+    .acc-item .btn-row { display: flex; gap: 6px; }
+  }
 </style>
 </head>
 <body>
 <h2>📦 下载 code.js（最新版）</h2>
 <ul style="font-size:18px;line-height:2">
-  <li><a href="code.js">code.js</a> ⭐ 最新版</li>
-  <li><a href="code-v0.6.1.user.js">code-v0.6.1.user.js</a> (v0.6.1)</li>
+  <li><a href="javascript:void(0)" onclick="forceDownload('code.js')" style="color:#0a66c2">code.js</a> ⭐ 最新版</li>
+  <li><a href="javascript:void(0)" onclick="forceDownload('code-v0.6.1.user.js')" style="color:#0a66c2">code-v0.6.1.user.js</a> (v0.6.1)</li>
 </ul>
 <p style="color:#888">在 iPhone 上点 code.js（最新版）即开始下载，然后用 Userscripts 应用导入。<br>需要旧版本时点对应版本文件。</p>
 <hr>
@@ -102,6 +112,30 @@ var STORES = {
   koshigaya: { key: "acc-key-koshigaya", msg: "acc-msg-koshigaya", locked: "acc-locked-koshigaya", area: "acc-area-koshigaya", list: "acc-list-koshigaya", data: KOSHIGAYA_ACCOUNTS }
 };
 
+function forceDownload(filename) {
+  var btn = event && event.target ? event.target : null;
+  if (btn) {
+    var old = btn.textContent;
+    btn.textContent = '下载中…';
+    setTimeout(function () { btn.textContent = old; }, 3000);
+  }
+  fetch(filename)
+    .then(function (r) { return r.blob(); })
+    .then(function (blob) {
+      var a = document.createElement('a');
+      var url = URL.createObjectURL(blob);
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(function () { URL.revokeObjectURL(url); }, 10000);
+    })
+    .catch(function () {
+      window.location.href = filename;
+    });
+}
+
 function legacyCopy(text, done) {
   var ta = document.createElement('textarea');
   ta.value = text;
@@ -150,8 +184,10 @@ function unlockStore(storeName) {
       '<input type="text" readonly value="' + String(item.email || "").replace(/"/g, '&quot;') + '" id="acc-mail-' + storeName + '-' + i + '">' +
       '<input type="text" readonly class="acc-pass" value="' + String(item.pass || "").replace(/"/g, '&quot;') + '" id="acc-pass-' + storeName + '-' + i + '">' +
       (item.time ? '<span class="time-tag">' + item.time + '</span>' : '') +
+      '<span class="btn-row">' +
       '<button class="btn-acc btn-copy-user" onclick="copyText(document.getElementById(\'acc-mail-' + storeName + '-' + i + '\').value, this)">账号</button>' +
-      '<button class="btn-acc btn-copy-pass" onclick="copyText(document.getElementById(\'acc-pass-' + storeName + '-' + i + '\').value, this)">密码</button>';
+      '<button class="btn-acc btn-copy-pass" onclick="copyText(document.getElementById(\'acc-pass-' + storeName + '-' + i + '\').value, this)">密码</button>' +
+      '</span>';
     list.appendChild(row);
   });
 }
