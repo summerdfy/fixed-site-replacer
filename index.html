@@ -21,6 +21,50 @@
   .locked-box { padding: 14px; border: 1px solid #e0c9a6; border-radius: 10px; background: #fdf6ec; margin-bottom: 8px; }
   .store-block { margin-bottom: 24px; }
 
+  /* ===== 火影忍者彩蛋按钮 ===== */
+  .naruto-zone { display: flex; gap: 12px; margin: 20px 0; }
+  .naruto-btn {
+    flex: 1; position: relative; padding: 16px 10px; border: 2px solid #ff8c00; border-radius: 12px;
+    background: linear-gradient(180deg, #2a1a05 0%, #120a02 100%); color: #ffb347; cursor: pointer;
+    font-size: 15px; font-weight: 800; font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    letter-spacing: 2px; text-shadow: 0 0 8px rgba(255, 140, 0, 0.9); overflow: hidden;
+    box-shadow: 0 0 12px rgba(255, 140, 0, 0.35), inset 0 0 18px rgba(255, 140, 0, 0.15);
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .naruto-btn::before {
+    content: "✴"; position: absolute; top: 6px; right: 10px; font-size: 18px; color: #ff8c00;
+    animation: shuriken-spin 3s linear infinite; opacity: 0.8;
+  }
+  .naruto-btn::after {
+    content: ""; position: absolute; left: -60%; top: 0; width: 40%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 180, 60, 0.25), transparent);
+    transform: skewX(-20deg); animation: ninja-shine 2.8s ease-in-out infinite;
+  }
+  .naruto-btn:active { transform: scale(0.95); box-shadow: 0 0 20px rgba(255, 140, 0, 0.7); }
+  .naruto-btn .btn-label { display: block; }
+  .naruto-btn .btn-sub { display: block; font-size: 11px; font-weight: 400; color: #d99a4e; margin-top: 4px; letter-spacing: 1px; text-shadow: none; }
+  @keyframes shuriken-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+  @keyframes ninja-shine { 0%, 100% { left: -60%; } 45%, 55% { left: 120%; } }
+
+  /* ===== 5秒穿越全屏loading ===== */
+  #time-jump-overlay {
+    position: fixed; inset: 0; z-index: 99999; display: none; flex-direction: column; align-items: center; justify-content: center;
+    background: radial-gradient(ellipse at center, #1a0d02 0%, #000 75%);
+  }
+  #time-jump-overlay.on { display: flex; }
+  #tj-shuriken {
+    font-size: 72px; color: #ff8c00; text-shadow: 0 0 30px rgba(255, 140, 0, 0.9), 0 0 60px rgba(255, 80, 0, 0.6);
+    animation: shuriken-spin 1.1s linear infinite;
+  }
+  #tj-flame {
+    font-size: 42px; margin-top: -8px; animation: flame-flicker 0.5s ease-in-out infinite alternate;
+  }
+  #tj-count { font-size: 60px; font-weight: 900; color: #ffb347; text-shadow: 0 0 20px rgba(255, 140, 0, 0.9); margin-top: 8px; font-variant-numeric: tabular-nums; }
+  #tj-bar { width: 200px; height: 8px; background: rgba(255, 140, 0, 0.2); border-radius: 4px; margin-top: 16px; overflow: hidden; }
+  #tj-bar-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #ff8c00, #ffd700); border-radius: 4px; box-shadow: 0 0 10px rgba(255, 200, 60, 0.9); transition: width 0.9s linear; }
+  #tj-text { color: #d99a4e; font-size: 13px; margin-top: 12px; letter-spacing: 3px; }
+  @keyframes flame-flicker { from { transform: scale(1) rotate(-3deg); opacity: 0.85; } to { transform: scale(1.15) rotate(3deg); opacity: 1; } }
+
   /* 小屏（iPhone SE 等窄屏） */
   @media (max-width: 380px) {
     .acc-chip { max-width: 100%; }
@@ -174,6 +218,38 @@ function copyText(text, done) {
   }
 }
 
+// ===== 火影彩蛋：穿越到5秒后 =====
+var tjTimer = null;
+function timeJump5s() {
+  if (tjTimer) return;
+  var overlay = document.getElementById('time-jump-overlay');
+  var count = document.getElementById('tj-count');
+  var fill = document.getElementById('tj-bar-fill');
+  overlay.classList.add('on');
+  count.textContent = '5';
+  fill.style.transition = 'none';
+  fill.style.width = '0%';
+  void fill.offsetWidth;
+  fill.style.transition = 'width 5s linear';
+  fill.style.width = '100%';
+  tjTimer = setInterval(function () {
+    var left = Number(count.textContent) - 1;
+    if (left > 0) {
+      count.textContent = String(left);
+    } else {
+      clearInterval(tjTimer);
+      tjTimer = null;
+      overlay.classList.remove('on');
+      showToast('✅ 已穿越到5秒后！');
+    }
+  }, 1000);
+}
+
+// ===== 火影彩蛋：穿越到24号 =====
+function jumpTo24() {
+  showToast('🕘 24号晚上9点开启，敬请期待！');
+}
+
 // 轻量 toast 提示
 function showToast(msg) {
   var t = document.getElementById('toast-tip');
@@ -240,6 +316,28 @@ function unlockStore(storeName) {
   updateProgress(storeName);
 }
 </script>
+
+<!-- ===== 火影忍者彩蛋按钮 ===== -->
+<div class="naruto-zone">
+  <button class="naruto-btn" onclick="timeJump5s()">
+    <span class="btn-label">🌀 穿越到5秒后</span>
+    <span class="btn-sub">忍法·時空間忍術</span>
+  </button>
+  <button class="naruto-btn" onclick="jumpTo24()">
+    <span class="btn-label">🌀 穿越到24号</span>
+    <span class="btn-sub">忍法·未来予知</span>
+  </button>
+</div>
+
+<!-- 5秒穿越全屏loading -->
+<div id="time-jump-overlay">
+  <div id="tj-shuriken">✴</div>
+  <div id="tj-flame">🔥</div>
+  <div id="tj-count">5</div>
+  <div id="tj-bar"><div id="tj-bar-fill"></div></div>
+  <div id="tj-text">時空忍術発動中…</div>
+</div>
+
 <div style="height:300px"></div>
 </body>
 </html>
