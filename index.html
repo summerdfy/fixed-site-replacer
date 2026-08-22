@@ -9,8 +9,8 @@
   .acc-list { max-height: 60vh; overflow-y: auto; border: 1px solid #e0c9a6; border-radius: 10px; background: #fdf6ec; padding: 10px; }
   .acc-list .acc-item { display: flex; align-items: center; gap: 6px; padding: 8px 6px; border-bottom: 1px solid #f0e2cc; flex-wrap: wrap; }
   .acc-list .acc-item:last-child { border-bottom: none; }
-  .acc-list input { flex: 1; min-width: 0; padding: 8px; border: 1px solid #ccc; border-radius: 6px; font-size: 13px; box-sizing: border-box; }
-  .acc-list input.acc-pass { flex: 0 0 120px; }
+  .acc-list .acc-mail-label { flex: 1; min-width: 0; font-size: 13px; word-break: break-all; padding: 6px 8px; background: #fff; border: 1px solid #e5ddd0; border-radius: 6px; }
+  .acc-list .acc-pass-label { flex: 0 0 110px; font-size: 13px; padding: 6px 8px; background: #fff; border: 1px solid #e5ddd0; border-radius: 6px; }
   .acc-list .btn-acc { flex: 0 0 auto; padding: 8px 10px; border: none; border-radius: 6px; font-size: 12px; cursor: pointer; }
   .btn-copy-user { background: #0a66c2; color: #fff; }
   .btn-copy-pass { background: #8a5a00; color: #fff; }
@@ -22,8 +22,7 @@
   /* 小屏（iPhone SE 等窄屏）：账号/密码上下排列 */
   @media (max-width: 380px) {
     .acc-list .acc-item { flex-direction: column; align-items: stretch; gap: 6px; }
-    .acc-list input { width: 100%; }
-    .acc-list input.acc-pass { flex: 1 1 auto; width: 100%; }
+    .acc-list .acc-mail-label, .acc-list .acc-pass-label { flex: 1 1 auto; width: 100%; }
     .acc-list .btn-acc { flex: 1 1 45%; padding: 10px 10px; font-size: 14px; }
     .acc-list .time-tag { align-self: flex-start; }
     .acc-item .btn-row { display: flex; gap: 6px; }
@@ -181,12 +180,12 @@ function unlockStore(storeName) {
     var row = document.createElement('div');
     row.className = 'acc-item';
     row.innerHTML =
-      '<input type="text" readonly value="' + String(item.email || "").replace(/"/g, '&quot;') + '" id="acc-mail-' + storeName + '-' + i + '">' +
-      '<input type="text" readonly class="acc-pass" value="' + String(item.pass || "").replace(/"/g, '&quot;') + '" id="acc-pass-' + storeName + '-' + i + '">' +
+      '<label class="acc-mail-label" id="acc-mail-' + storeName + '-' + i + '">' + String(item.email || "").replace(/</g, '&lt;') + '</label>' +
+      '<label class="acc-pass-label" id="acc-pass-' + storeName + '-' + i + '">' + String(item.pass || "").replace(/</g, '&lt;') + '</label>' +
       (item.time ? '<span class="time-tag">' + item.time + '</span>' : '') +
       '<span class="btn-row">' +
-      '<button class="btn-acc btn-copy-user" onclick="copyText(document.getElementById(\'acc-mail-' + storeName + '-' + i + '\').value, this)">账号</button>' +
-      '<button class="btn-acc btn-copy-pass" onclick="copyText(document.getElementById(\'acc-pass-' + storeName + '-' + i + '\').value, this)">密码</button>' +
+      '<button class="btn-acc btn-copy-user" onclick="copyText(document.getElementById(\'acc-mail-' + storeName + '-' + i + '\').textContent, this)">账号</button>' +
+      '<button class="btn-acc btn-copy-pass" onclick="copyText(document.getElementById(\'acc-pass-' + storeName + '-' + i + '\').textContent, this)">密码</button>' +
       '</span>';
     list.appendChild(row);
   });
