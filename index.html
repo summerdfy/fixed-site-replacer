@@ -13,11 +13,11 @@
   .acc-chip input[type="checkbox"] { width: 16px; height: 16px; margin: 0; flex: 0 0 auto; }
   .acc-mail { font-weight: 600; word-break: break-all; }
   .acc-pass { color: #6b4f2a; }
-  .btn-acc { border: none; border-radius: 10px; font-size: 11px; cursor: pointer; padding: 3px 8px; line-height: 1.4; flex: 0 0 auto; }
-  .btn-copy-user { background: #0a66c2; color: #fff; }
-  .btn-copy-pass { background: #8a5a00; color: #fff; }
   .time-tag { font-size: 11px; color: #8a5a00; background: #fdf0d8; border-radius: 10px; padding: 1px 6px; }
-  .btn-copy-all { padding: 10px 18px; border: none; border-radius: 8px; background: #0a66c2; color: #fff; font-size: 15px; margin-bottom: 8px; }
+  .progress-bar { padding: 10px 14px; border-radius: 10px; background: #eef4ff; color: #0a66c2; font-size: 15px; font-weight: 600; margin-bottom: 8px; border: 1px solid #c9ddf5; }
+  .acc-mail { cursor: pointer; }
+  .acc-mail:active, .acc-pass:active { opacity: 0.6; }
+  .acc-pass { cursor: pointer; }
   .locked-box { padding: 14px; border: 1px solid #e0c9a6; border-radius: 10px; background: #fdf6ec; margin-bottom: 8px; }
   .store-block { margin-bottom: 24px; }
 
@@ -55,7 +55,7 @@
     <div id="acc-msg-shibuya" style="color:#b00020;font-size:12px;margin-top:6px"></div>
   </div>
   <div id="acc-area-shibuya" style="display:none">
-    <button class="btn-copy-all" onclick="copyAll('shibuya')">📋 复制全部邮箱</button>
+    <div class="progress-bar" id="progress-shibuya">完成 0/76 (0.00%)</div>
     <div class="acc-list" id="acc-list-shibuya"></div>
   </div>
 </div>
@@ -72,7 +72,7 @@
     <div id="acc-msg-nagoya" style="color:#b00020;font-size:12px;margin-top:6px"></div>
   </div>
   <div id="acc-area-nagoya" style="display:none">
-    <button class="btn-copy-all" onclick="copyAll('nagoya')">📋 复制全部邮箱</button>
+    <div class="progress-bar" id="progress-nagoya">完成 0/55 (0.00%)</div>
     <div class="acc-list" id="acc-list-nagoya"></div>
   </div>
 </div>
@@ -89,7 +89,7 @@
     <div id="acc-msg-koshigaya" style="color:#b00020;font-size:12px;margin-top:6px"></div>
   </div>
   <div id="acc-area-koshigaya" style="display:none">
-    <button class="btn-copy-all" onclick="copyAll('koshigaya')">📋 复制全部邮箱</button>
+    <div class="progress-bar" id="progress-koshigaya">完成 0/87 (0.00%)</div>
     <div class="acc-list" id="acc-list-koshigaya"></div>
   </div>
 </div>
@@ -125,6 +125,7 @@ function toggleDone(storeName, email, cb) {
   saveDone(storeName, done);
   var chip = cb.closest('.acc-chip');
   if (chip) chip.classList.toggle('done', cb.checked);
+  updateProgress(storeName);
 }
 
 function forceDownload(filename) {
@@ -165,17 +166,33 @@ function legacyCopy(text, done) {
   done();
 }
 
-function copyText(text, btn) {
-  var done = function () {
-    var old = btn.textContent;
-    btn.textContent = '已复制 ✔';
-    setTimeout(function () { btn.textContent = old; }, 1200);
-  };
+function copyText(text, done) {
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(text).then(done, function () { legacyCopy(text, done); });
   } else {
     legacyCopy(text, done);
   }
+}
+
+// 点击账号/密码复制并弹提示
+function copyWithTip(text, label) {
+  copyText(text, function () {
+    alert(label + ' 已复制：' + text);
+  });
+}
+
+// 更新完成进度
+function updateProgress(storeName) {
+  var cfg = STORES[storeName];
+  var done = loadDone(storeName);
+  var total = cfg.data.length;
+  var count = 0;
+  cfg.data.forEach(function (item) {
+    if (done[String(item.email || "")]) count++;
+  });
+  var pct = total > 0 ? ((count / total) * 100).toFixed(2) : "0.00";
+  var el = document.getElementById("progress-" + storeName);
+  if (el) el.textContent = "完成 " + count + "/" + total + " (" + pct + "%)";
 }
 
 function unlockStore(storeName) {
@@ -200,20 +217,12 @@ function unlockStore(storeName) {
     row.className = 'acc-chip' + (isDone ? ' done' : '');
     row.innerHTML =
       '<input type="checkbox"' + (isDone ? ' checked' : '') + ' onchange="toggleDone(\'' + storeName + '\', \'' + email.replace(/'/g, "\\'") + '\', this)">' +
-      '<span class="acc-mail" id="acc-mail-' + storeName + '-' + i + '">' + email.replace(/</g, '&lt;') + '</span>' +
-      '<span class="acc-pass" id="acc-pass-' + storeName + '-' + i + '">' + String(item.pass || "").replace(/</g, '&lt;') + '</span>' +
-      (item.time ? '<span class="time-tag">' + item.time + '</span>' : '') +
-      '<button class="btn-acc btn-copy-user" onclick="copyText(document.getElementById(\'acc-mail-' + storeName + '-' + i + '\').textContent, this)">账号</button>' +
-      '<button class="btn-acc btn-copy-pass" onclick="copyText(document.getElementById(\'acc-pass-' + storeName + '-' + i + '\').textContent, this)">密码</button>';
+      '<span class="acc-mail" id="acc-mail-' + storeName + '-' + i + '" onclick="copyWithTip(document.getElementById(\'acc-mail-' + storeName + '-' + i + '\').textContent, \'账号\')">' + email.replace(/</g, '&lt;') + '</span>' +
+      '<span class="acc-pass" id="acc-pass-' + storeName + '-' + i + '" onclick="copyWithTip(document.getElementById(\'acc-pass-' + storeName + '-' + i + '\').textContent, \'密码\')">' + String(item.pass || "").replace(/</g, '&lt;') + '</span>' +
+      (item.time ? '<span class="time-tag">' + item.time + '</span>' : '');
     list.appendChild(row);
   });
-}
-
-function copyAll(storeName) {
-  var cfg = STORES[storeName];
-  var text = cfg.data.map(function (item) { return item.email + (item.time ? "  " + item.time : ""); }).join('\n');
-  var btn = document.querySelector('.store-block #acc-area-' + storeName + ' .btn-copy-all');
-  copyText(text, btn);
+  updateProgress(storeName);
 }
 </script>
 <div style="height:300px"></div>
