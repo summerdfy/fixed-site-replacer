@@ -91,6 +91,11 @@
 </ul>
 <p style="color:#888">在 iPhone 上点 code.js（最新版）即开始下载，然后用 Userscripts 应用导入。<br>需要旧版本时点对应版本文件。</p>
 <hr>
+<h3>📌 bookmarklet 书签版（不依赖扩展）</h3>
+<p style="font-size:15px;line-height:1.7">不想装扩展？点下方按钮把新脚本复制到剪贴板，然后粘贴到书签 URL 即可：<br>打开任意网页 → 分享 → <b>添加书签</b> → 书本按钮 → <b>编辑</b> → 把地址全部删掉 → <b>长按粘贴</b> → 完成。<br>之后在目标网站点这个书签，文字立即替换。</p>
+<button onclick="copyBookmarklet()" style="width:100%;padding:14px;font-size:17px;border:none;border-radius:10px;background:#0a66c2;color:#fff;margin:4px 0 14px">📋 复制新脚本到剪贴板</button>
+<p style="color:#888">💡 复制成功后，把内容粘贴到任意书签的「地址」栏（以 <code>javascript:</code> 开头）。<br>规则配置与油猴版共用，首次点击弹出设置面板时填写即可。</p>
+<hr>
 <h3>🔗 目标网站</h3>
 <p style="font-size:18px;line-height:1.8">
   <a href="https://parks2.bandainamco-am.co.jp/" target="_blank" rel="noopener" style="color:#0a66c2;word-break:break-all">https://parks2.bandainamco-am.co.jp/</a>
@@ -281,6 +286,29 @@ function copyWithTip(text, label) {
   copyText(text, function () {
     showToast(label + ' 已复制：' + text);
   });
+}
+
+// bookmarklet 复制：拉取 bookmarklet.txt 并复制到剪贴板
+function copyBookmarklet() {
+  var btn = event && event.target ? event.target : null;
+  if (btn) {
+    var old = btn.textContent;
+    btn.textContent = '⏳ 正在加载…';
+    setTimeout(function () { btn.textContent = old; }, 3000);
+  }
+  fetch('bookmarklet.txt')
+    .then(function (r) {
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r.text();
+    })
+    .then(function (text) {
+      copyText(text, function () {
+        showToast('✅ 新脚本已复制！去粘贴到书签地址栏吧');
+      });
+    })
+    .catch(function (e) {
+      showToast('❌ 加载失败：' + (e && e.message ? e.message : '未知错误'));
+    });
 }
 
 // 更新完成进度
