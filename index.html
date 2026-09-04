@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh">
 <head>
 <meta charset="utf-8">
@@ -84,12 +84,17 @@
 </style>
 </head>
 <body>
-<h2>📦 下载 code.js（最新版）</h2>
+<h2>📦 下载脚本（最新版）</h2>
 <ul style="font-size:18px;line-height:2">
-  <li><a href="javascript:void(0)" onclick="forceDownload('code.js')" style="color:#0a66c2">code.js</a> ⭐ 最新版</li>
+  <li><a href="javascript:void(0)" onclick="forceDownload('code-v1.6.1.user.js')" style="color:#0a66c2">code-v1.6.1.user.js</a> ⭐ 最新版 (v1.6.1)</li>
+  <li><a href="javascript:void(0)" onclick="forceDownload('code-v1.6.2jr.user.js')" style="color:#0a66c2">code-v1.6.2jr.user.js</a> 兼容版 (v1.6.2)</li>
   <li><a href="javascript:void(0)" onclick="forceDownload('code-v0.6.1.user.js')" style="color:#0a66c2">code-v0.6.1.user.js</a> (v0.6.1)</li>
 </ul>
-<p style="color:#888">在 iPhone 上点 code.js（最新版）即开始下载，然后用 Userscripts 应用导入。<br>需要旧版本时点对应版本文件。</p>
+<p style="color:#888">在 iPhone 上点 code-v0.7.0.user.js（最新版）即开始下载，然后用 Userscripts 应用导入。<br>需要旧版本时点对应版本文件。</p>
+<h3>🧪 注入测试（排查用）</h3>
+<ul style="font-size:18px;line-height:2">
+  <li><a href="javascript:void(0)" onclick="forceDownload('test-inject.user.js')" style="color:#0a66c2">test-inject.user.js</a> (任意网站左上角显示蓝色标记，验证 Userscripts 是否正常注入)</li>
+</ul>
 <hr>
 <h3>📌 bookmarklet 书签版（不依赖扩展）</h3>
 <p style="font-size:15px;line-height:1.7">不想装扩展？点下方按钮把新脚本复制到剪贴板，然后粘贴到书签 URL 即可：<br>打开任意网页 → 分享 → <b>添加书签</b> → 书本按钮 → <b>编辑</b> → 把地址全部删掉 → <b>长按粘贴</b> → 完成。<br>之后在目标网站点这个书签，文字立即替换。</p>
@@ -102,57 +107,6 @@
 </p>
 <p style="color:#888">👆 点击在新页签打开网站；长按链接可弹出菜单「拷贝」，复制网址。</p>
 <hr>
-
-<!-- 8/26 東京渋谷店 -->
-<div class="store-block">
-  <h3>🔑 8/26 東京渋谷店账号（154）</h3>
-  <div id="acc-locked-shibuya" class="locked-box">
-    <div style="font-weight:600;margin-bottom:8px">🔒 此区域已锁定，请输入访问口令</div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap">
-      <input type="password" id="acc-key-shibuya" placeholder="输入口令" style="flex:1;min-width:140px;padding:8px;border:1px solid #ccc;border-radius:6px;font-size:14px;box-sizing:border-box">
-      <button onclick="unlockStore('shibuya')" style="flex:0 0 auto;padding:8px 16px;border:none;border-radius:6px;background:#0a66c2;color:#fff;font-size:14px">解锁</button>
-    </div>
-    <div id="acc-msg-shibuya" style="color:#b00020;font-size:12px;margin-top:6px"></div>
-  </div>
-  <div id="acc-area-shibuya" style="display:none">
-    <div class="progress-bar" id="progress-shibuya">完成 0/154 (0.00%)</div>
-    <div class="acc-list" id="acc-list-shibuya"></div>
-  </div>
-</div>
-
-<!-- 8/25 愛知名古屋店 -->
-<div class="store-block">
-  <h3>🔑 8/25 愛知名古屋店账号（60）</h3>
-  <div id="acc-locked-nagoya" class="locked-box">
-    <div style="font-weight:600;margin-bottom:8px">🔒 此区域已锁定，请输入访问口令</div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap">
-      <input type="password" id="acc-key-nagoya" placeholder="输入口令" style="flex:1;min-width:140px;padding:8px;border:1px solid #ccc;border-radius:6px;font-size:14px;box-sizing:border-box">
-      <button onclick="unlockStore('nagoya')" style="flex:0 0 auto;padding:8px 16px;border:none;border-radius:6px;background:#0a66c2;color:#fff;font-size:14px">解锁</button>
-    </div>
-    <div id="acc-msg-nagoya" style="color:#b00020;font-size:12px;margin-top:6px"></div>
-  </div>
-  <div id="acc-area-nagoya" style="display:none">
-    <div class="progress-bar" id="progress-nagoya">完成 0/60 (0.00%)</div>
-    <div class="acc-list" id="acc-list-nagoya"></div>
-  </div>
-</div>
-
-<!-- 8/26 埼玉越谷店 -->
-<div class="store-block">
-  <h3>🔑 8/26 埼玉越谷店账号（202）</h3>
-  <div id="acc-locked-koshigaya" class="locked-box">
-    <div style="font-weight:600;margin-bottom:8px">🔒 此区域已锁定，请输入访问口令</div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap">
-      <input type="password" id="acc-key-koshigaya" placeholder="输入口令" style="flex:1;min-width:140px;padding:8px;border:1px solid #ccc;border-radius:6px;font-size:14px;box-sizing:border-box">
-      <button onclick="unlockStore('koshigaya')" style="flex:0 0 auto;padding:8px 16px;border:none;border-radius:6px;background:#0a66c2;color:#fff;font-size:14px">解锁</button>
-    </div>
-    <div id="acc-msg-koshigaya" style="color:#b00020;font-size:12px;margin-top:6px"></div>
-  </div>
-  <div id="acc-area-koshigaya" style="display:none">
-    <div class="progress-bar" id="progress-koshigaya">完成 0/202 (0.00%)</div>
-    <div class="acc-list" id="acc-list-koshigaya"></div>
-  </div>
-</div>
 
 <script src="shibuya-accounts.js"></script>
 <script src="nagoya-accounts.js"></script>
